@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('expire_date');
             $table->text('note');
-            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });

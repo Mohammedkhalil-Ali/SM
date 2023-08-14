@@ -15,17 +15,18 @@ class ContractController extends Controller
     public function index(Request $request)
     {
         $data=Contract::query();
-        $data->where('customer_id',$request->customer_id);
+        if (!$request->q)
+            $data->where('customer_id',$request->customer_id);
         $data->when($request->q,function($q) use($request){
             $q->orWhere(function($query) use($request)
             {
-                $query->where('name', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
+                $query->where('payment', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
             })->orWhere(function($query) use($request)
             {
-                $query->where('address', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
+                $query->where('start_date', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
             })->orWhere(function($query) use($request)
             {
-                $query->where('phone_number', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
+                $query->where('expire_date', 'LIKE','%'.$request->q.'%')->where('customer_id',$request->customer_id);
             });
         });
 

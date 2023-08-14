@@ -12,8 +12,10 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index(){
+        
         $year=Carbon::now()->format('Y');
         $month=Carbon::now()->format('m');
+
         $this_month='';
         $this_month_year='';
         $one_month_ago='';
