@@ -19,6 +19,7 @@
         'address',
         'phone_number',
         'start_date',
+        'note',
         ['user','name']
         
 ])
@@ -28,6 +29,7 @@ const TableHead=ref([
         'Address',
         'Phone Number',
         'Start date',
+        'Note',
         'User'
         
 ])

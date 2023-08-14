@@ -14,8 +14,8 @@
     </div>
 </template>
 <script setup>
-import Nav from '..//Layout/Nav.vue'
-import Aside from '..//Layout/Aside.vue'
+import Nav from '../Layout/Nav.vue'
+import Aside from '../Layout/Aside.vue'
 
 import { ref , computed  } from '@vue/runtime-core'
 import  menuStore  from '../../Stores/menuStore'

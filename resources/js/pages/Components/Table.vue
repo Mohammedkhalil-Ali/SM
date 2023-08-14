@@ -69,10 +69,11 @@
                                         </thead>
                                         <tbody class=" divide-y bg-white divide-gray-200">
                                             <tr  class="hover:bg-gray-100" v-for="(item, index) in tbodyData" :key="index">
-                                                <td  class="p-4 whitespace-nowrap text-base font-medium text-gray-900 border-x"   v-for="(td, intd) in theadData" :key="intd">
-                                                    <div >
+                                                <td  class="whitespace-nowrap text-base font-medium text-gray-900 border-x"  v-for="(td, intd) in theadData" :key="intd"  :class="td=='note'?'p-0':'p-4 '">
+                                                    <div>
                                                         <span v-if="(typeof td != 'object') && td=='done'">{{ item[td]==0?'Not Done':'Done' }} </span>
-                                                        <span v-if="(typeof td != 'object')&& td!='done'">{{ item[td] }} </span>
+                                                        <textarea v-if="(typeof td != 'object')&& td=='note'" cols="20" rows="4" class="w-full resize-none"> {{ item[td] }}</textarea>
+                                                        <span v-if="(typeof td != 'object')&& td!='done' && td!='note'">{{ item[td] }} </span>
                                                         <!-- for relation -->
                                                         <span v-else-if="(typeof td == 'object') && td.length==2 ">{{ (item[td[0]])?.[td[1]]  }}</span>
                                                         <span v-else-if="(typeof td == 'object') && td.length==3 ">{{ (item[td[0]])?.[td[1]]?.[td[2]] }}</span>

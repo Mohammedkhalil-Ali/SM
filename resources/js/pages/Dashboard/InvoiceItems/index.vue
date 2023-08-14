@@ -18,6 +18,7 @@
         'price',
         'quantity',
         'subtotal',
+        'note',
         ['user','name']
         
 ])
@@ -27,6 +28,7 @@ const TableHead=ref([
         'Price',
         'Quantity',
         'Subtotal',
+        'Note',
         'User'
         
 ])
