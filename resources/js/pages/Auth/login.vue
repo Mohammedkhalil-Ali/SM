@@ -33,10 +33,9 @@ import authStore from '../../Stores/auth'
 const $axios = inject('$axios');
 
 const form = ref({
-    email:'',
-    password:''
+    email : '' ,
+    password : ''
 })
-
 
 const AuthStore = authStore()
 const router = useRouter();
@@ -44,12 +43,12 @@ const router = useRouter();
 const errors = ref([])
 const login = async ()=>{
     errors.value=[]
+
     await $axios.post('/login',form.value).then(({data})=>{
         AuthStore.setUser(data.user)
         localStorage.setItem('token', data.token)
         $axios.defaults.headers.common["Authorization"] ="Bearer " + data.token;
         router.push('/home')
-
     }).catch((error)=>{
         console.log(error)
         let errorsData= error.response.data.errors
@@ -57,6 +56,6 @@ const login = async ()=>{
             errors.value = errorsData;
         }
     })
-}
 
+}
 </script>

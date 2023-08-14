@@ -20,6 +20,8 @@
            </div>
        </aside>
 
+       <!-- For Mobile  --> 
+
        <aside id="sidebar"
             class="fixed lg:hidden  w-full z-20 min-h-screen bg-white text-gray-600 lg:top-0 flex-shrink-0 flex-col transition-width duration-500 ease-in-out overflow-y-auto"
             :class="navmobile?'left-0':'left-[-100%]'"
@@ -36,9 +38,7 @@
                                    <span v-if="navmobile" class="ml-3">{{ item.name }}</span>
                                </router-link>
                             </li>
-
                         </ul>
-
                     </div>
                 </div>
             </div>
@@ -56,16 +56,14 @@ const navbar = computed(() => menues.nav)
 const navmobile = computed(() => menues.navmobile)
 
 let routes= ref([
-   {route_name: 'home', icon: 'fas fa-dashboard', name:'home', links:['home']},
-   {route_name: 'customers', icon: 'fas fa-user', name:'customers', links:['customers','customers.create','customers.edit','contract','contract.create','contract.edit']},
-   {route_name: 'invoice-item', icon: 'fa-solid fa-circle-info', name:'invoice item', links:['invoice-item','invoice-item.create','invoice-item.edit']},
-   {route_name: 'invoice', icon: 'fa-solid fa-file-invoice-dollar', name:'invoice', links:['invoice','invoice.create','invoice.edit']},
+    {route_name: 'home', icon: 'fas fa-dashboard', name:'home', links:['home']},
+    {route_name: 'customers', icon: 'fas fa-user', name:'customers', links:['customers','customers.create','customers.edit','contract','contract.create','contract.edit']},
+    {route_name: 'invoice-item', icon: 'fa-solid fa-circle-info', name:'invoice item', links:['invoice-item','invoice-item.create','invoice-item.edit']},
+    {route_name: 'invoice', icon: 'fa-solid fa-file-invoice-dollar', name:'invoice', links:['invoice','invoice.create','invoice.edit']},
 ])
 
 const removeNav = ()=>{
     menues.setNavMobile()
-   }
+}
 
-
-defineProps(['menu'])
 </script>

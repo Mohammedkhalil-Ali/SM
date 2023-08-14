@@ -1,18 +1,22 @@
 <template>
     <div class="w-full min-h-screen bg-white">
         <div class="ml-10 mr-2 flex justify-start gap-x-4 md:gap-x-0 md:justify-between items-center">
+
                 <!-- record size -->
+
                 <div class="flex items-center space-x-3 mb-2">
                     <span>Show</span>
                     <select v-model="show" class="bg-gray-100 px-4 w-20 py-2 rounded border" @change="load(show,search)">
-                        <option value="1">1</option>
-                        <option value="3">3</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
                     <span>Show 100 entries</span> 
                 </div>
+
                 <!-- search -->
+
                 <div class="flex items-center">
                     <div class=" lg:block lg:pl-32 mb-4">
                         <label for="topbar-search" class="sr-only">Search
@@ -38,6 +42,7 @@
             </div>
 
             <!-- Table -->
+
             <div class="ml-10 mt-2 mr-2" :class="props?.tableHead?.length > 7 ? 'overflow-x-scroll' : ''">
                 <div :class="props?.tableHead?.length > 7 ? 'min-w-[1640px] ' : ''">
                  
@@ -63,7 +68,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class=" divide-y bg-white divide-gray-200">
-                                            <tr  class="hover:bg-gray-100 hover:bg-gray-100" v-for="(item, index) in tbodyData" :key="index">
+                                            <tr  class="hover:bg-gray-100" v-for="(item, index) in tbodyData" :key="index">
                                                 <td  class="p-4 whitespace-nowrap text-base font-medium text-gray-900 border-x"   v-for="(td, intd) in theadData" :key="intd">
                                                     <div >
                                                         <span v-if="(typeof td != 'object') && td=='done'">{{ item[td]==0?'Not Done':'Done' }} </span>
@@ -117,80 +122,76 @@
                     </div>
                 </div>
             </div>
-
  
             <!-- Pagination -->
 
-                    <div class="flex ml-10 mt-5 items-center justify-between mr-2" v-if="tbodyData?.length > 0">
-                        <p >Showing <span>{{ show }} </span> of {{ dataForTable?.total }}  entries</p>
-                        <div class="flex flex-wrap space-x-2 mt-3 items-center">
+            <div class="flex ml-10 mt-5 items-center justify-between mr-2" v-if="tbodyData?.length > 0">
+                <p >Showing <span>{{ show }} </span> of {{ dataForTable?.total }}  entries</p>
+                <div class="flex flex-wrap space-x-2 mt-3 items-center">
 
-                            <div>
-                                <button
-                                    :disabled="dataForTable.prev_page_url == null"
-                                    @click="load(show, search ,  --dataForTable.current_page)"
-                                    class="btn mx-1 cursor-pointer"
-                                >Previous</button>
-                            </div>
-
-                            <div v-for="(item, index) in dataForTable.links" :key="'page'+index" >
-                                <button
-                                    @click="item.url != null? load(show,search, item.label) : ''"
-                                    v-if="index!=0 && index!= dataForTable.links.length-1"
-                                    :class="[ item.active?'bg-cyan-600 text-white' : ' text-cyan-600']"
-                                    class="px-3 py-1 rounded"
-                                    v-html="item.label"
-                                />
-                            </div>
-
-                            <button 
-                                    :disabled="dataForTable.next_page_url == null"
-                                    @click="load(show,search, ++dataForTable.current_page)"
-                                    class="btn mx-1 cursor-pointer"
-                                >Next</button>
-
-                        </div>
+                    <div>
+                        <button
+                            :disabled="dataForTable.prev_page_url == null"
+                            @click="load(show, search ,  --dataForTable.current_page)"
+                            class="btn mx-1 cursor-pointer"
+                        >Previous</button>
                     </div>
+
+                    <div v-for="(item, index) in dataForTable.links" :key="'page'+index" >
+                        <button
+                            @click="item.url != null? load(show,search, item.label) : ''"
+                            v-if="index!=0 && index!= dataForTable.links.length-1"
+                            :class="[ item.active?'bg-cyan-600 text-white' : ' text-cyan-600']"
+                            class="px-3 py-1 rounded"
+                            v-html="item.label"
+                        />
+                    </div>
+
+                    <button 
+                            :disabled="dataForTable.next_page_url == null"
+                            @click="load(show,search, ++dataForTable.current_page)"
+                            class="btn mx-1 cursor-pointer"
+                        >Next</button>
+
+                </div>
+            </div>
+
         </div>
 </template>
 
 <script setup>
-    import { inject, onMounted, ref,computed,watch  } from '@vue/runtime-core'
-    const props = defineProps(['theadData','tableHead','url','doctor','edit','contract','editcontract'])
-    const $axios = inject('$axios');
+import { inject, onMounted, ref,computed,watch  } from '@vue/runtime-core'
+const props = defineProps(['theadData','tableHead','url','doctor','edit','contract','editcontract'])
+const $axios = inject('$axios');
 
-    let search = ref('')
-    let show = ref(100)
-    let tbodyData = ref([])
-    let dataForTable = ref([])
+let search = ref('')
+let show = ref(100)
+let tbodyData = ref([])
+let dataForTable = ref([])
 
-    const load=async(number,q,page)=>{
-        await $axios.get(props.url+"record="+number+'&q='+q+'&page='+page).then(({data})=>{
+const load = async (number,q,page)=>{
+    await $axios.get(props.url+"record="+number+'&q='+q+'&page='+page).then(({data})=>{
         $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
         tbodyData.value=data.data.data
         dataForTable.value=data.data
         console.log(data.data.data);
         console.log(data.data);
+    }).catch((error)=>{
+        console.log(error)
+    })
+}
 
-        }).catch((error)=>{
-            console.log(error)
-        })
-    }
 
-
-    onMounted(async ()=>{
+onMounted( async ()=>{
     await $axios.get(props.url+"record="+show.value).then(({data})=>{
         $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
         tbodyData.value=data.data.data
         dataForTable.value=data.data
         console.log(data.data.data);
         console.log(data.data);
-
     }).catch((error)=>{
         console.log(error)
     })
-   })
-  
-
+})
 
  </script>

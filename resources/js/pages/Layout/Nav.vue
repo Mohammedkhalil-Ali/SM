@@ -44,52 +44,43 @@ import authStore from '../../Stores/auth'
 import { useRouter } from "vue-router"
 const $axios = inject('$axios');
 
-    const router=useRouter()
-    const authentication = authStore()
-    const name = computed(() => authentication.user)
+const router=useRouter()
+const authentication = authStore()
+const name = computed(() => authentication.user)
 
-    const menues=menuStore()
-    const navbar = computed(() => menues.nav)
-    const navmobile = computed(() => menues.navmobile)
+const menues=menuStore()
+const navbar = computed(() => menues.nav)
+const navmobile = computed(() => menues.navmobile)
+
+const logoutModal= ref(false)
 
 
+const menu = ()=>{
+    menues.setNav()
+}
 
-   const logout = async ()=>{
-        await $axios.post('/logout').then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            authentication.setUser([])
-            localStorage.removeItem('token')
-            router.push('/login')
+const menuMobile = ()=>{
+    menues.setNavMobile()
+}
 
+const logout = async ()=>{
+    await $axios.post('/logout').then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        authentication.setUser([])
+        localStorage.removeItem('token')
+        router.push('/login')
     }).catch((error)=>{
         console.log(error)
     })
-   }
+}
 
 
-   onMounted(async ()=>{
+onMounted( async ()=>{
     await $axios.get('/user').then(({data})=>{
         authentication.setUser(data.user)
-
     }).catch((error)=>{
         console.log(error)
     })
-   })
-
-   const logoutModal= ref(false)
-  
-
-   const menu = ()=>{
-    menues.setNav()
-   }
-
-   const menuMobile = ()=>{
-    menues.setNavMobile()
-   }
-
-   window.addEventListener('click', (e) => {
-
-           
-    })
+})
 
 </script>

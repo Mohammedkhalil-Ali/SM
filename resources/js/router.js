@@ -29,6 +29,7 @@ const IfAuth = (to, from, next)=>{
     const IfNotAuth = (to, from, next)=>{
     !localStorage.getItem('token')? next() : next('/')
     }
+    
 const routes=[
     {path:'/login',name:'login',component:Login, beforeEnter: IfNotAuth},
     {path:'/',name:'dashboard',component:Main,redirect:'/home',children:[
