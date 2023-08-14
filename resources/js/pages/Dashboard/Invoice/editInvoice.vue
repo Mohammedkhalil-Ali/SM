@@ -61,164 +61,164 @@
 </template>
 
 <script setup>
-    import { inject,onMounted , reactive , ref } from "@vue/runtime-core";
-    import { useRoute, useRouter } from "vue-router";
-    const $axios = inject('$axios');
-    import Swal from 'sweetalert2'
-    
-    const form = ref({
-        customer_id :"" ,
-        invoice_date : "" ,
-        done : false
+import { inject,onMounted , reactive , ref } from "@vue/runtime-core";
+import { useRoute, useRouter } from "vue-router";
+const $axios = inject('$axios');
+import Swal from 'sweetalert2'
+
+const form = ref({
+    customer_id :"" ,
+    invoice_date : "" ,
+    done : false
+})
+
+const show = ref(false)
+const customers = ref([])
+const customer = ref('')
+const customerCheck = ref('')
+
+const route = useRoute()
+const router = useRouter()
+
+
+let id =ref(route.params.id)
+
+
+//Show
+const showOption = async ()=>{
+    if(customer.value != ''){
+        customerCheck.value == customer.value
+        show.value=true
+        await $axios.get('/customer?q='+customer.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        customers.value=data.data
+    }).catch((error)=>{
+        console.log(error)           
     })
-
-    const show = ref(false)
-    const customers = ref([])
-    const customer = ref('')
-    const customerCheck = ref('')
-
-    const route = useRoute()
-    const router = useRouter()
-    
-    
-    let id =ref(route.params.id)
-    
-
-
-    const showOption = async ()=>{
-        if(customer.value != ''){
-            customerCheck.value == customer.value
-            show.value=true
-            await $axios.get('/customer?q='+customer.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            customers.value=data.data
-        }).catch((error)=>{
-            console.log(error)           
-        })
-        }else{
-            customerCheck.value == ''
-            show.value=false
-            await $axios.get('/customer?q=').then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            customers.value=data.data
-        }).catch((error)=>{
-            console.log(error)           
-        })
-        }
-    }
-
-    const chooseOption = (e)=>{
-        form.value.customer_id=e.id
-        customerCheck.value=''
-        customer.value=e.name
+    }else{
+        customerCheck.value == ''
         show.value=false
+        await $axios.get('/customer?q=').then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        customers.value=data.data
+    }).catch((error)=>{
+        console.log(error)           
+    })
     }
+}
+
+//Choose
+const chooseOption = (e)=>{
+    form.value.customer_id=e.id
+    customerCheck.value=''
+    customer.value=e.name
+    show.value=false
+}
 
 
-    
-    const errors = ref([])
-    
-    //edit
-    
-    const update = async ()=>{
-        errors.value=[]
-        await $axios.put('/invoice/'+route.params.id+'?_method=put',form.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
 
-            Toast.fire({
-            icon: 'success',
-            title: 'Stored successfully'
-            })
+const errors = ref([])
 
-        }).catch((error)=>{
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'error',
-            color:"red",
-            title: 'Something was wrong'
-            })
-            console.log(error)
-            let errorsData= error.response.data.errors
-            if(typeof errorsData != 'undefined'){
-                errors.value = errorsData;
-            }
+//Update
+const update = async ()=>{
+    errors.value=[]
+    await $axios.put('/invoice/'+route.params.id+'?_method=put',form.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
         })
-    }
-    
-    //delete
-    const deleteData = async()=>{
-        errors.value=[]
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-            }).then(async(result) => {
-            if (result.isConfirmed) {
-            await $axios.post('/invoice/'+route.params.id+'?_method=delete',form.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
 
-            Toast.fire({
-            icon: 'success',
-            title: 'Deleted successfully'
-            })
-
-            
-            router.push({name:'invoice'})
+        Toast.fire({
+        icon: 'success',
+        title: 'Updated successfully'
         })
-    }
+
+    }).catch((error)=>{
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'error',
+        color:"red",
+        title: 'Something went wrong'
+        })
+        console.log(error)
+        let errorsData= error.response.data.errors
+        if(typeof errorsData != 'undefined'){
+            errors.value = errorsData;
+        }
+    })
+}
+
+
+//Delete
+const deleteData = async()=>{
+    errors.value=[]
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then(async(result) => {
+        if (result.isConfirmed) {
+        await $axios.post('/invoice/'+route.params.id+'?_method=delete',form.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'success',
+        title: 'Deleted successfully'
+        })
+     
+        router.push({name:'invoice'})
+    })
+}
 })
 
 
-       
-    }
     
-    onMounted(async ()=>{
-        id =route.params.id
-        await $axios.get("invoice/"+route.params.id).then(({data})=>{
+}
+
+onMounted( async ()=>{
+    id =route.params.id
+    await $axios.get("invoice/"+route.params.id).then(({data})=>{
         $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
         form.value.customer_id = data.data.customer_id 
         customer.value = data.data.customer.name 
         form.value.invoice_date =data.data.invoice_date 
         data.data.done==1?form.value.done=true:form.value.done=false
-        }).catch((error)=>{
-            console.log(error)
-        })
+    }).catch((error)=>{
+        console.log(error)
     })
+})
 </script>

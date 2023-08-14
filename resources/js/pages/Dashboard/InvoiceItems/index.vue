@@ -8,19 +8,18 @@
 </template>
 
 <script setup>
-    import Header from '../../Components/Header.vue'
-    import Table from '../../Components/Table.vue'
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    
+import Header from '../../Components/Header.vue'
+import Table from '../../Components/Table.vue'
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
 
-    const thead=ref([
-        'name',
-        'price',
-        'quantity',
-        'subtotal',
-        'note',
-        ['user','name']
-        
+
+const thead=ref([
+    'name',
+    'price',
+    'quantity',
+    'subtotal',
+    'note',
+    ['user','name']
 ])
 
 const TableHead=ref([
@@ -29,8 +28,7 @@ const TableHead=ref([
         'Quantity',
         'Subtotal',
         'Note',
-        'User'
-        
+        'User'     
 ])
 
 </script>

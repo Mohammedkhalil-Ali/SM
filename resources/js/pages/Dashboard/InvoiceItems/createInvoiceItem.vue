@@ -73,83 +73,80 @@
 </template>
 
 <script setup>
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    import { useRoute, useRouter } from "vue-router";
-    import Swal from 'sweetalert2'
-    const $axios = inject('$axios');
-    
-    const form = ref({
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
+import { useRoute, useRouter } from "vue-router";
+import Swal from 'sweetalert2'
+const $axios = inject('$axios');
+
+const form = ref({
+    name : "" ,
+    price : "" ,
+    quantity :"" ,
+    subtotal : "" ,
+    note : ""
+})
+
+const router=useRouter()
+const errors = ref([])
+
+//Store
+const store = async ()=>{
+    errors.value=[]
+    await $axios.post('/invoiceitem',form.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'success',
+        title: 'Stored successfully'
+        })
+
+        
+        form.value = ref({
         name : "" ,
         price : "" ,
         quantity :"" ,
         subtotal : "" ,
         note : ""
     })
-    
-    const router=useRouter()
-    const errors = ref([])
-    
-    //new
-    const store = async ()=>{
-        errors.value=[]
-        await $axios.post('/invoiceitem',form.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'success',
-            title: 'Stored successfully'
-            })
-
-            
-            form.value = ref({
-            name : "" ,
-            price : "" ,
-            quantity :"" ,
-            subtotal : "" ,
-            note : ""
-        })
-            
-
-        }).catch((error)=>{
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'error',
-            color:"red",
-            title: 'Something was wrong'
-            })
-            console.log(error)
-            let errorsData= error.response.data.errors
-            if(typeof errorsData != 'undefined'){
-                errors.value = errorsData;
-            }
-        })
-            
-    }
-    
-    
-    onMounted(()=>{
         
+
+    }).catch((error)=>{
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'error',
+        color:"red",
+        title: 'Something went wrong'
+        })
+        console.log(error)
+        let errorsData= error.response.data.errors
+        if(typeof errorsData != 'undefined'){
+            errors.value = errorsData;
+        }
     })
+        
+}
+
+
 </script>

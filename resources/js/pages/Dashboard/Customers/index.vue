@@ -9,18 +9,18 @@
 </template>
 
 <script setup>
-    import Header from '../../Components/Header.vue'
-    import Table from '../../Components/Table.vue'
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    
+import Header from '../../Components/Header.vue'
+import Table from '../../Components/Table.vue'
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
 
-    const thead=ref([
-        'name',
-        'address',
-        'phone_number',
-        'start_date',
-        'note',
-        ['user','name']
+
+const thead=ref([
+    'name',
+    'address',
+    'phone_number',
+    'start_date',
+    'note',
+    ['user','name']
         
 ])
 

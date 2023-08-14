@@ -63,86 +63,81 @@
 </template>
 
 <script setup>
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    import { useRoute, useRouter } from "vue-router";
-    import Swal from 'sweetalert2'
-    const $axios = inject('$axios');
-    const route = useRoute()
-  
-    const customer_id= ref(route.params.customer_id)
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
+import { useRoute, useRouter } from "vue-router";
+import Swal from 'sweetalert2'
+const $axios = inject('$axios');
+const route = useRoute()
 
-    const form = ref({
-        payment : "" ,
-        start_date : "" ,
-        expire_date :"" ,
-        note : "",
-        customer_id : customer_id
-    })
-    
-    const router=useRouter()
-    const errors = ref([])
-    
-    //new
-    const store = async ()=>{
-        errors.value=[]
-        await $axios.post('/contract?',form.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
+const customer_id= ref(route.params.customer_id)
 
-            Toast.fire({
-            icon: 'success',
-            title: 'Stored successfully'
-            })
+const form = ref({
+    payment : "" ,
+    start_date : "" ,
+    expire_date :"" ,
+    note : "",
+    customer_id : customer_id
+})
 
-            
-            form.value = ref({
-            name : "" ,
-            price : "" ,
-            quantity :"" ,
-            subtotal : "" ,
-            note : ""
+const router=useRouter()
+const errors = ref([])
+
+//Store
+const store = async ()=>{
+    errors.value=[]
+    await $axios.post('/contract?',form.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
         })
-            
 
-        }).catch((error)=>{
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'error',
-            color:"red",
-            title: 'Something was wrong'
-            })
-            console.log(error)
-            let errorsData= error.response.data.errors
-            if(typeof errorsData != 'undefined'){
-                errors.value = errorsData;
-            }
+        Toast.fire({
+        icon: 'success',
+        title: 'Stored successfully'
         })
-            
-    }
-    
-    
-    onMounted(()=>{
+
         
+        form.value = ref({
+        name : "" ,
+        price : "" ,
+        quantity :"" ,
+        subtotal : "" ,
+        note : ""
     })
+
+    }).catch((error)=>{
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'error',
+        color:"red",
+        title: 'Something went wrong'
+        })
+        console.log(error)
+        let errorsData= error.response.data.errors
+        if(typeof errorsData != 'undefined'){
+            errors.value = errorsData;
+        }
+    })
+        
+}
+
 </script>

@@ -60,127 +60,128 @@
 
 
 <script setup>
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    import { useRoute, useRouter } from "vue-router";
-    import Swal from 'sweetalert2'
-    const $axios = inject('$axios');
-
-   
-    
-        const form = ref({
-            customer_id :"" ,
-            invoice_date : "" ,
-            done : false
-        })
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
+import { useRoute, useRouter } from "vue-router";
+import Swal from 'sweetalert2'
+const $axios = inject('$axios');
 
 
-    const router=useRouter()
-    const errors = ref([])
-    const show = ref(false)
-    const customers = ref([])
-    const customer = ref('')
-    const customerCheck = ref('')
-    
-    const showOption = async ()=>{
-        if(customer.value != ''){
-            customerCheck.value == customer.value
-            show.value=true
-            await $axios.get('/customer?q='+customer.value).then(({data})=>{
+const form = ref({
+    customer_id : "" ,
+    invoice_date : "" ,
+    done : false
+})
+
+
+const router=useRouter()
+const errors = ref([])
+const show = ref(false)
+const customers = ref([])
+const customer = ref('')
+const customerCheck = ref('')
+
+//Show
+const showOption = async ()=>{
+    if(customer.value != ''){
+        customerCheck.value == customer.value
+        show.value=true
+        await $axios.get('/customer?q='+customer.value).then(({data})=>{
             $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
             customers.value=data.data
         }).catch((error)=>{
             console.log(error)           
         })
-        }else{
-            customerCheck.value == ''
-            show.value=false
-            await $axios.get('/customer?q=').then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            customers.value=data.data
-        }).catch((error)=>{
-            console.log(error)           
-        })
-        }
-    }
-
-    const chooseOption = (e)=>{
-        form.value.customer_id=e.id
-        customerCheck.value=''
-        customer.value=e.name
+    }else{
+        customerCheck.value == ''
         show.value=false
-    }
-
-    
-    //new
-    const store = async ()=>{
-        errors.value=[]
-        form.value.done == false?form.value.done = '0' : form.value.done = '1';
-        await $axios.post('/invoice',form.value).then(({data})=>{
-            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'success',
-            title: 'Stored successfully'
-            })
-
-            
-            form.value = ref({
-            customer_id :"" ,
-            invoice_date : "" ,
-            done : false
-        })
-
-        customer.value=''
-        customerCheck.value=''
-            
-
-        }).catch((error)=>{
-            form.value.done == '0'?form.value.done = false : form.value.done = true;
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-            })
-
-            Toast.fire({
-            icon: 'error',
-            color:"red",
-            title: 'Something was wrong'
-            })
-            console.log(error)
-            let errorsData= error.response.data.errors
-            if(typeof errorsData != 'undefined'){
-                errors.value = errorsData;
-            }
-        })
-            
-    }
-    
-    
-    onMounted(async()=>{
         await $axios.get('/customer?q=').then(({data})=>{
             $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
             customers.value=data.data
         }).catch((error)=>{
             console.log(error)           
         })
+    }
+}
+
+//Choose
+const chooseOption = (e)=>{
+    form.value.customer_id=e.id
+    customerCheck.value=''
+    customer.value=e.name
+    show.value=false
+}
+
+
+//Store
+const store = async ()=>{
+    errors.value=[]
+    form.value.done == false?form.value.done = '0' : form.value.done = '1';
+    await $axios.post('/invoice',form.value).then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'success',
+        title: 'Stored successfully'
+        })
+
+        
+        form.value = ref({
+        customer_id :"" ,
+        invoice_date : "" ,
+        done : false
     })
+
+    customer.value=''
+    customerCheck.value=''
+        
+
+    }).catch((error)=>{
+        form.value.done == '0'?form.value.done = false : form.value.done = true;
+        const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+        })
+
+        Toast.fire({
+        icon: 'error',
+        color:"red",
+        title: 'Something went wrong'
+        })
+        console.log(error)
+        let errorsData= error.response.data.errors
+        if(typeof errorsData != 'undefined'){
+            errors.value = errorsData;
+        }
+    })
+        
+}
+
+
+onMounted(async()=>{
+    await $axios.get('/customer?q=').then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        customers.value=data.data
+    }).catch((error)=>{
+        console.log(error)           
+    })
+})
 </script>
 

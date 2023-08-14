@@ -56,24 +56,24 @@
 </template>
 
 <script setup>
-    import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
-    import DoughnutChart from './doughnut.vue'
-    import BarChart from './bar.vue'
-    const $axios = inject('$axios')
+import { inject, onMounted , reactive , ref } from "@vue/runtime-core";
+import DoughnutChart from './doughnut.vue'
+import BarChart from './bar.vue'
+const $axios = inject('$axios')
 
-    const customer = ref('')
-    const contract = ref('')
-    const invoice = ref('')
-    const invoice_done = ref('')
-    const invoice_not_done = ref('')
-    const customer_this_month = ref('')
-    const customer_one_month_ago = ref('')
-    const customer_two_month_ago = ref('')
-    const customer_three_month_ago = ref('')
-    const customer_four_month_ago = ref('')
+const customer = ref('')
+const contract = ref('')
+const invoice = ref('')
+const invoice_done = ref('')
+const invoice_not_done = ref('')
+const customer_this_month = ref('')
+const customer_one_month_ago = ref('')
+const customer_two_month_ago = ref('')
+const customer_three_month_ago = ref('')
+const customer_four_month_ago = ref('')
 
-    onMounted(async ()=>{
-        await $axios.get("home").then(({data})=>{
+onMounted(async ()=>{
+    await $axios.get("home").then(({data})=>{
         $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
         customer.value = data.customer
         contract.value = data.contract
@@ -86,8 +86,8 @@
         customer_three_month_ago.value = data.customer_three_month_ago
         customer_four_month_ago.value = data.customer_four_month_ago
         console.log(data);
-        }).catch((error)=>{
-            console.log(error)
-        })
+    }).catch((error)=>{
+        console.log(error)
     })
+})
 </script>

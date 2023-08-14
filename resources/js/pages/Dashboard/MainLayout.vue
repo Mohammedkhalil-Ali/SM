@@ -20,7 +20,7 @@ import Aside from '../Layout/Aside.vue'
 import { ref , computed  } from '@vue/runtime-core'
 import  menuStore  from '../../Stores/menuStore'
 
-const menes=menuStore()
-const navbar = computed(() => menes.nav)
+const menues=menuStore()
+const navbar = computed(() => menues.nav)
 
 </script>
