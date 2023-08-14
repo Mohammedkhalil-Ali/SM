@@ -10,7 +10,7 @@
                            <li v-for="(item, index) in routes" :key="index">
                                <router-link :to="{name:item.route_name}"
                                    class="text-base text-gray-900 font-normal rounded flex items-center p-2 pl-3 hover:bg-gray-100 group " :class="item.links.includes(route.name)? 'bg-cyan-600 hover:bg-cyan-700 text-white hover:text-white' : ''">
-                                   <i class="text-xl" :class="[item.icon, item.links.includes(route.name)? 'text-white group-hover:text-white' : ' text-gray-500']"></i>
+                                   <i class="text-xl" :class="[item.icon, item.links.includes(route.name)? 'text-white group-hover:text-white' : ' text-gray-500',item.route_name=='invoice'?'ml-1':'']"></i>
                                    <span v-if="navbar" class="ml-3">{{ item.name }}</span>
                                </router-link>
                            </li>
@@ -32,7 +32,6 @@
                         <ul class="space-y-2 pb-2 mt-2">
                             <li v-for="(item, index) in routes" :key="index">
                                 <router-link :to="{name:item.route_name}"
-                                @click="removeNav"
                                    class="text-base text-gray-900 font-normal rounded flex items-center p-2 pl-3 hover:bg-gray-100 group " :class="item.links.includes(route.name)? 'bg-cyan-600 hover:bg-cyan-700 text-white hover:text-white' : ''">
                                    <i class="text-xl" :class="[item.icon, item.links.includes(route.name)? 'text-white group-hover:text-white' : ' text-gray-500']"></i>
                                    <span v-if="navmobile" class="ml-3">{{ item.name }}</span>
@@ -56,10 +55,10 @@ const navbar = computed(() => menues.nav)
 const navmobile = computed(() => menues.navmobile)
 
 let routes= ref([
-    {route_name: 'home', icon: 'fas fa-dashboard', name:'home', links:['home']},
-    {route_name: 'customers', icon: 'fas fa-user', name:'customers', links:['customers','customers.create','customers.edit','contract','contract.create','contract.edit']},
-    {route_name: 'invoice-item', icon: 'fa-solid fa-circle-info', name:'invoice item', links:['invoice-item','invoice-item.create','invoice-item.edit']},
-    {route_name: 'invoice', icon: 'fa-solid fa-file-invoice-dollar', name:'invoice', links:['invoice','invoice.create','invoice.edit']},
+    {route_name: 'home', icon: 'fas fa-dashboard', name:'Home', links:['home']},
+    {route_name: 'customers', icon: 'fas fa-user', name:'Customers', links:['customers','customers.create','customers.edit','contract','contract.create','contract.edit']},
+    {route_name: 'invoice-item', icon: 'fa-solid fa-circle-info', name:'Invoice items', links:['invoice-item','invoice-item.create','invoice-item.edit']},
+    {route_name: 'invoice', icon: 'fa-solid fa-file-lines', name:'Invoices', links:['invoice','invoice.create','invoice.edit']},
 ])
 
 const removeNav = ()=>{
