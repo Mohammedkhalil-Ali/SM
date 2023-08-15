@@ -16,13 +16,13 @@
                                 <span>Customer</span>
                                 <i v-if="errors['customer_id']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
-                            <input type="text" v-model="customer" @keyup="showOption()" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="">
+                            <input type="text" v-model="customer" @keyup="showOption()" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Customer name">
                             <div class="bg-gray-400 border border-cyan-600 rounded-md max-h-[26vh] min-h-fit absolute top-[4.5rem] w-full overflow-y-auto" v-if="show && customers.length>0">
                                 <div class="data p-2 h-[5vh] bg-white hover:bg-gray-100 cursor-pointer border-b" v-for="(item,index) in customers" :key="index" @click="chooseOption(item)">
                                     {{ item.name }}
                                 </div>
                             </div>
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['customer_id']">{{ errors['customer_id'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['customer_id']">{{ errors['customer_id'][0] }}</div>
                         </div>
     
                         <div class="col-span-6 sm:col-span-3">
@@ -31,7 +31,7 @@
                                 <i v-if="errors['invoice_date']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
                             <input type="date" v-model="form.invoice_date" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['invoice_date']">{{ errors['invoice_date'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['invoice_date']">{{ errors['invoice_date'][0] }}</div>
                         </div>
     
     
@@ -43,7 +43,7 @@
                                     <i v-if="errors['done']" class="fa-solid fa-circle-exclamation text-lg text-red-600 mt-1"></i>
                                 </label>
                             </div>
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['done']">{{ errors['done'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['done']">{{ errors['done'][0] }}</div>
                         </div>
     
                     </div>
@@ -140,6 +140,14 @@ const update = async ()=>{
         icon: 'success',
         title: 'Updated successfully'
         })
+
+        $axios.get("invoice/"+route.params.id).then(({data})=>{
+            $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+            customer.value = data.data.customer.name
+        }).catch((error)=>{
+            console.log(error)
+        })
+        
 
     }).catch((error)=>{
         const Toast = Swal.mixin({

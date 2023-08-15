@@ -17,7 +17,7 @@
                                 <i v-if="errors['start_date']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
                             <input type="date" v-model="form.start_date" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['start_date']">{{ errors['start_date'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['start_date']">{{ errors['start_date'][0] }}</div>
                         </div>
     
                         <div class="col-span-4 sm:col-span-3">
@@ -26,7 +26,7 @@
                                 <i v-if="errors['expire_date']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
                             <input type="date" v-model="form.expire_date" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['expire_date']">{{ errors['expire_date'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['expire_date']">{{ errors['expire_date'][0] }}</div>
                         </div>
     
     
@@ -36,7 +36,7 @@
                                 <i v-if="errors['payment']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
                             <input type="text" v-model="form.payment" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="xxxxxxxxxxxxx">
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['payment']">{{ errors['payment'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['payment']">{{ errors['payment'][0] }}</div>
                         </div>
 
 
@@ -46,7 +46,7 @@
                                 <i v-if="errors['note']" class="fa-solid fa-circle-exclamation text-lg text-red-600"></i>
                             </label>
                             <textarea name="" v-model="form.note" id="" cols="10" rows="5" class="outline-none shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"></textarea>
-                            <div class="text-sm text-red-600 mt-1" v-if="errors['note']">{{ errors['note'][0] }}</div>
+                            <div class="text-xs text-red-600 mt-1 uppercase" v-if="errors['note']">{{ errors['note'][0] }}</div>
                         </div>
     
     
