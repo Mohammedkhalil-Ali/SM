@@ -32,7 +32,6 @@
                             </div>
                             <input  id="topbar-search"
                             v-model="search"
-                            @keyup="load(show,search)"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full pl-10 p-2.5"
                                 placeholder="Search">
                         </div>
@@ -164,11 +163,25 @@
 import { inject, onMounted, ref,computed,watch  } from '@vue/runtime-core'
 const props = defineProps(['theadData','tableHead','url','doctor','edit','contract','editcontract'])
 const $axios = inject('$axios');
+import debounce from "lodash.debounce";
 
 let search = ref('')
 let show = ref(100)
 let tbodyData = ref([])
 let dataForTable = ref([])
+
+const debouncedWatch = debounce( async () => {
+    await $axios.get(props.url+"record="+show.value+'&q='+search.value+'&page=').then(({data})=>{
+        $axios.defaults.headers.common["Authorization"] ="Bearer " + localStorage.getItem('token');
+        tbodyData.value=data.data.data
+        dataForTable.value=data.data
+        console.log(data.data);
+    }).catch((error)=>{
+        console.log(error)
+    })
+}, 300);
+
+watch(search, debouncedWatch);
 
 const load = async (number,q,page)=>{
     await $axios.get(props.url+"record="+number+'&q='+q+'&page='+page).then(({data})=>{

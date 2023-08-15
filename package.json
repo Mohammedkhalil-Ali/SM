@@ -17,6 +17,7 @@
         "@vitejs/plugin-vue": "^4.2.3",
         "aos": "^2.3.4",
         "chart.js": "^4.3.0",
+        "lodash": "^4.17.21",
         "pinia": "^2.1.6",
         "sweetalert2": "^11.7.22",
         "vue": "^3.2.36",
