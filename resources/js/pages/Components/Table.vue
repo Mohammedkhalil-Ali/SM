@@ -68,10 +68,10 @@
                                         </thead>
                                         <tbody class=" divide-y bg-white divide-gray-200">
                                             <tr  class="hover:bg-gray-100" v-for="(item, index) in tbodyData" :key="index">
-                                                <td  class="whitespace-nowrap text-base font-medium text-gray-900 border-x"  v-for="(td, intd) in theadData" :key="intd"  :class="td=='note'?'p-0':'p-4 '">
+                                                <td  class="whitespace-nowrap text-base font-medium text-gray-900 border-x border-b"  v-for="(td, intd) in theadData" :key="intd"  :class="td=='note'?'p-0':'p-4 '">
                                                     <div>
                                                         <span v-if="(typeof td != 'object') && td=='done'">{{ item[td]==0?'Not Done':'Done' }} </span>
-                                                        <textarea v-if="(typeof td != 'object')&& td=='note'" cols="20" rows="4" class="w-full resize-none"> {{ item[td] }}</textarea>
+                                                        <textarea v-if="(typeof td != 'object')&& td=='note'" cols="20" rows="2" class="w-full resize-none"> {{ item[td] }}</textarea>
                                                         <span v-if="(typeof td != 'object')&& td!='done' && td!='note'">{{ item[td] }} </span>
                                                         <!-- for relation -->
                                                         <span v-else-if="(typeof td == 'object') && td.length==2 ">{{ (item[td[0]])?.[td[1]]  }}</span>
@@ -80,7 +80,7 @@
         
                                                 </td>
                                                 
-                                                <td class="border-x p-1" v-if="props.contract">
+                                                <td class=" p-1 whitespace-nowrap text-base font-medium text-gray-900 border-x border-b" v-if="props.contract">
                                                     <router-link 
                                                         :to="{
                                                             name: 'contract',
@@ -93,7 +93,7 @@
                                                     </router-link>
                                                 </td>
 
-                                                <td class=" p-1 flex items-center mt-2 w-20" v-if="props.editcontract">
+                                                <td class=" p-1 whitespace-nowrap text-base font-medium text-gray-900 border-x border-b" v-if="props.editcontract">
                                                     <router-link 
                                                         :to="{ 
                                                             name: 'contract.edit',
@@ -107,9 +107,9 @@
                                                     </router-link>
                                                 </td>
 
-                                                <td class=" p-1 flex items-center mt-2 w-20" v-else>
+                                                <td class=" p-1 whitespace-nowrap text-base font-medium text-gray-900 border-x border-b" v-else>
                                                     <router-link :to="props.edit+item['id']+'/edit'" class=" cursor-pointer w-10 ml-5 text-white bg-cyan-600 text-center hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded text-sm flex items-center px-2  py-2 justify-center ">
-                                                        <i class="fas fa-pen"></i>
+                                                        <i class="fas fa-pen text-md"></i>
                                                     </router-link>
                                                 </td>
 
